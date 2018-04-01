@@ -10,20 +10,20 @@ public class GreetingClient {
         int port =Integer.parseInt(args[1]);
 
         try{
-            System.out.println("连接到主机：" + serverName + " 端口：" + port);
+            System.out.println("Connected Server:" + serverName + " Port:" + port);
             Socket client = new Socket(serverName, port);
-            System.out.println("远程主机的地址：" + client.getRemoteSocketAddress());
+            System.out.println("Remote Server IP:" + client.getRemoteSocketAddress());
 
             OutputStream outputStream = client.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-            dataOutputStream.writeUTF("Hello From " + client.getLocalSocketAddress());
+            dataOutputStream.writeUTF("Hello From" + client.getLocalSocketAddress());
 
             InputStream inFromServer = client.getInputStream();
 
             DataInputStream dataInputStream = new DataInputStream(inFromServer);
             String dataFromServer = dataInputStream.readUTF();
-            System.out.println("服务器响应：" + dataFromServer);
+            System.out.println("Server Response:" + dataFromServer);
 
             client.close();
 

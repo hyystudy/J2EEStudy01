@@ -5,15 +5,22 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
-
+/**
+ * 通过cmd 操作.java文件的时候，如果这个java文件有package， 那么我们需要在
+ * package的父文件夹 执行命令：java 文件全路径 参数
+ * 以这个文件为例子：
+ * 先cd 到 src 目录下 然后
+ * javac com/company/GreetingServer.java
+ * 得到编译文件 然后
+ * java com/company/GreetingServer 6066
+ * */
 public class GreetingServer extends Thread {
 
     private final ServerSocket serverSocket;
 
     public GreetingServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(10000);
+        serverSocket.setSoTimeout(100000);
     }
 
     @Override
@@ -21,16 +28,16 @@ public class GreetingServer extends Thread {
         //super.run();
 
         while (true){
-            System.out.println("等待远程链接， 端口为：" + serverSocket.getLocalPort());
+            System.out.println("Waiting connected, Port:" + serverSocket.getLocalPort());
 
             try {
                 Socket accept = serverSocket.accept();
-                System.out.println("远程主机地址是:" + accept.getRemoteSocketAddress());
+                System.out.println("Remote Client IP Address:" + accept.getRemoteSocketAddress());
                 DataInputStream dataInputStream = new DataInputStream(accept.getInputStream());
                 System.out.println(dataInputStream.readUTF());
 
                 DataOutputStream dataOutputStream = new DataOutputStream(accept.getOutputStream());
-                dataOutputStream.writeUTF("谢谢链接我:" + accept.getLocalSocketAddress() + "\nGoodBye");
+                dataOutputStream.writeUTF("Thanks to connected me :" + accept.getLocalSocketAddress() + "\nGoodBye");
 
                 serverSocket.close();
                 break;
